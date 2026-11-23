@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Everest — Modern E-Commerce Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement">
+    <div class="container announcement-content">
+      <span>🏔️ <strong>Everest:</strong> Premium E-Commerce Store with Express.js & SQLite</span>
+      <div class="promo-pill">
+        Use coupon <code id="promoPillCode">EVEREST</code> for 20% OFF
+        <button class="copy-code-btn" onclick="copyCoupon('EVEREST')" title="Copy Coupon Code">
+          <i class="fa-regular fa-copy"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <header class="main-header">
+    <div class="container header-container">
+      <a href="#" class="brand-logo" onclick="resetFilters(); return false;">
+        <div class="logo-icon">
+          <i class="fa-solid fa-mountain"></i>
+        </div>
+        <span class="logo-text">Everest<span>Store</span></span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search gadgets, audio, wearables, accessories..."
+          autocomplete="off">
+        <button id="clearSearchBtn" class="clear-search-btn" title="Clear search">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Action Nav Items -->
+      <div class="nav-actions">
+        <!-- User Account Menu -->
+        <div class="account-menu-wrapper" id="accountMenuWrapper">
+          <button class="nav-action-btn" id="userMenuBtn">
+            <i class="fa-regular fa-user"></i>
+            <span id="userBtnLabel">Sign In</span>
+            <i class="fa-solid fa-chevron-down caret-icon"></i>
+          </button>
+          <div class="account-dropdown" id="accountDropdown">
+            <div id="guestMenuContent">
+              <div class="dropdown-header">
+                <strong>Welcome to Everest</strong>
+                <p>Sign in to manage orders & checkout faster</p>
+              </div>
+              <button class="btn btn-primary btn-sm btn-block" onclick="openAuthModal('login')">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+              </button>
+              <button class="btn btn-outline btn-sm btn-block mt-2" onclick="openAuthModal('register')">
+                <i class="fa-solid fa-user-plus"></i> Create Account
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="demo-login-quick-btn" onclick="quickDemoLogin()">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> 1-Click Demo Login
+              </button>
+            </div>
+            <div id="userMenuContent" style="display: none;">
+              <div class="dropdown-header user-info">
+                <div class="user-avatar" id="dropdownUserAvatar">EV</div>
+                <div>
+                  <strong id="dropdownUserName">Everest Customer</strong>
+                  <span id="dropdownUserEmail">customer@everest.com</span>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" onclick="openMyOrdersModal()">
+                <i class="fa-solid fa-box-archive"></i> My Orders History
+              </button>
+              <button class="dropdown-item text-danger" onclick="logoutUser()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Button -->
+        <button class="nav-action-btn cart-btn" id="cartOpenBtn" title="View Shopping Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-label">Cart</span>
+          <span class="cart-badge" id="cartBadgeCount">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Tabs Navigation -->
+    <nav class="category-nav">
+      <div class="container category-container" id="categoryTabs">
+        <button class="cat-pill active" data-category="All">
+          <i class="fa-solid fa-border-all"></i> All Products
+        </button>
+        <button class="cat-pill" data-category="Audio">
+          <i class="fa-solid fa-headphones"></i> Audio
+        </button>
+        <button class="cat-pill" data-category="Wearables">
+          <i class="fa-solid fa-clock"></i> Wearables
+        </button>
+        <button class="cat-pill" data-category="Electronics">
+          <i class="fa-solid fa-laptop"></i> Electronics
+        </button>
+        <button class="cat-pill" data-category="Accessories">
+          <i class="fa-solid fa-keyboard"></i> Accessories
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <span class="hero-badge"><i class="fa-solid fa-mountain"></i> Everest Next-Gen Tech</span>
+        <h1>Peak Performance Electronics, Built by Everest.</h1>
+        <p>Explore cutting-edge audio gear, curved 4K displays, mechanical peripherals, and health trackers with
+          real-time stock and instant checkout.</p>
+        <div class="hero-highlights">
+          <div class="highlight-item"><i class="fa-solid fa-truck-fast"></i> Free Shipping Over ₹999</div>
+          <div class="highlight-item"><i class="fa-solid fa-shield-check"></i> 1-Year Warranty</div>
+          <div class="highlight-item"><i class="fa-solid fa-rotate-left"></i> 30-Day Returns</div>
+        </div>
+      </div>
+      <div class="hero-coupons-card">
+        <h3><i class="fa-solid fa-sparkles"></i> Exclusive Everest Offers</h3>
+        <div class="coupon-tag-item" onclick="copyCoupon('EVEREST')">
+          <div class="tag-left">
+            <code>EVEREST</code>
+            <span>20% OFF Entire Catalog</span>
+          </div>
+          <button class="mini-copy-btn"><i class="fa-regular fa-copy"></i></button>
+        </div>
+        <div class="coupon-tag-item" onclick="copyCoupon('FREESHIP')">
+          <div class="tag-left">
+            <code>FREESHIP</code>
+            <span>Free Express Delivery</span>
+          </div>
+          <button class="mini-copy-btn"><i class="fa-regular fa-copy"></i></button>
+        </div>
+        <div class="coupon-tag-item" onclick="copyCoupon('EVEREST10')">
+          <div class="tag-left">
+            <code>EVEREST10</code>
+            <span>10% OFF Any Purchase</span>
+          </div>
+          <button class="mini-copy-btn"><i class="fa-regular fa-copy"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Catalog Section -->
+  <main class="catalog-section">
+    <div class="container">
+      <!-- Catalog Controls & Filters -->
+      <div class="catalog-header-bar">
+        <div class="catalog-title-area">
+          <h2 id="catalogTitle">All Products</h2>
+          <span class="product-count-label" id="productCountLabel">Loading catalog...</span>
+        </div>
+
+        <div class="catalog-controls">
+          <!-- Price Range Filter -->
+          <div class="filter-dropdown-wrapper">
+            <select id="priceFilterSelect" class="form-select">
+              <option value="all">All Prices</option>
+              <option value="under3000">Under ₹3,000</option>
+              <option value="3000to7000">₹3,000 to ₹7,000</option>
+              <option value="over7000">₹7,000 &amp; Above</option>
+            </select>
+          </div>
+
+          <!-- Sort Select -->
+          <div class="sort-dropdown-wrapper">
+            <select id="sortSelect" class="form-select">
+              <option value="newest">Sort by: Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating-desc">Customer Rating</option>
+              <option value="name-asc">Product Name (A-Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filters Tag Pills -->
+      <div class="active-filters-bar" id="activeFiltersBar" style="display: none;">
+        <span class="filter-tag" id="activeCategoryTag"></span>
+        <span class="filter-tag" id="activeSearchTag" style="display: none;"></span>
+        <button class="btn-clear-all" onclick="resetFilters()">Clear Filters</button>
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div class="product-grid" id="productGrid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyCatalogState" style="display: none;">
+        <i class="fa-solid fa-box-open empty-icon"></i>
+        <h3>No matching products found</h3>
+        <p>Try adjusting your search query, price filter, or browse another category.</p>
+        <button class="btn btn-primary mt-3" onclick="resetFilters()">View All Products</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================================================= -->
+  <!-- MODALS & DRAWERS -->
+  <!-- ============================================================= -->
+
+  <!-- Slide-out Shopping Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cartOverlay">
+    <div class="cart-drawer" id="cartDrawer">
+      <div class="cart-header">
+        <div class="cart-title">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <h3>Shopping Cart</h3>
+          <span class="cart-count-pill" id="cartHeaderCount">0</span>
+        </div>
+        <button class="close-drawer-btn" id="cartCloseBtn" title="Close Cart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Free Shipping Meter -->
+      <div class="shipping-meter-box" id="shippingMeterBox">
+        <div class="meter-text" id="shippingMeterText">
+          Add ₹999.00 more to get <strong>Free Standard Shipping</strong>!
+        </div>
+        <div class="meter-progress-track">
+          <div class="meter-progress-fill" id="shippingProgressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Cart Items List Container -->
+      <div class="cart-body" id="cartItemsContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Cart Footer / Summary -->
+      <div class="cart-footer" id="cartFooter">
+        <!-- Coupon Code Input Box -->
+        <div class="coupon-box">
+          <div class="coupon-input-group">
+            <i class="fa-solid fa-ticket"></i>
+            <input type="text" id="couponInput" placeholder="Enter promo code (e.g. EVEREST)" uppercase
+              autocomplete="off">
+            <button id="applyCouponBtn" class="btn btn-sm btn-dark">Apply</button>
+          </div>
+          <div id="appliedCouponTag" class="applied-coupon-pill" style="display: none;">
+            <span id="appliedCouponLabel"></span>
+            <button onclick="removeCoupon()" title="Remove Coupon"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+
+        <!-- Totals Calculation -->
+        <div class="summary-table">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">₹0.00</span>
+          </div>
+          <div class="summary-row discount-row" id="cartDiscountRow" style="display: none;">
+            <span>Discount (<span id="cartDiscountPercent">0</span>%)</span>
+            <span id="cartDiscountAmount">-₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Estimated Shipping</span>
+            <span id="cartShippingFee">₹99.00</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total</span>
+            <span id="cartGrandTotal">₹0.00</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block checkout-btn" id="proceedCheckoutBtn">
+          <span>Proceed to Checkout</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="btn btn-link btn-block continue-shopping-btn" onclick="closeCart()">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Details Page / Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-container product-modal-container">
+      <button class="modal-close-btn" onclick="closeProductModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="product-modal-body" id="productModalBody">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal (Order Processing) -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-container checkout-modal-container">
+      <button class="modal-close-btn" onclick="closeCheckoutModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="checkout-header">
+        <i class="fa-solid fa-lock checkout-security-icon"></i>
+        <h2>Secure Checkout & Order Processing</h2>
+        <p>Complete your shipping and payment information below.</p>
+      </div>
+
+      <div class="checkout-grid">
+        <!-- Shipping Form -->
+        <form id="checkoutForm" class="checkout-form" onsubmit="handlePlaceOrder(event)">
+          <div class="form-section-title">
+            <span class="step-num">1</span> Shipping Details
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="checkoutName">Full Name *</label>
+              <input type="text" id="checkoutName" required placeholder="John Doe">
+            </div>
+            <div class="form-group col-6">
+              <label for="checkoutEmail">Email Address *</label>
+              <input type="email" id="checkoutEmail" required placeholder="john@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="checkoutAddress">Street Address *</label>
+            <input type="text" id="checkoutAddress" required placeholder="123 Tech Boulevard, Apt 4B">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="checkoutCity">City *</label>
+              <input type="text" id="checkoutCity" required placeholder="New York">
+            </div>
+            <div class="form-group col-6">
+              <label for="checkoutPostal">Postal / ZIP Code *</label>
+              <input type="text" id="checkoutPostal" required placeholder="10001">
+            </div>
+          </div>
+
+          <div class="form-section-title mt-4">
+            <span class="step-num">2</span> Payment Method
+          </div>
+
+          <div class="payment-options">
+            <label class="payment-option-card">
+              <input type="radio" name="paymentMethod" value="Card" checked>
+              <div class="option-content">
+                <div class="option-title"><i class="fa-solid fa-credit-card"></i> Credit / Debit Card</div>
+                <small>Visa, Mastercard, Amex, RuPay</small>
+              </div>
+            </label>
+            <label class="payment-option-card">
+              <input type="radio" name="paymentMethod" value="UPI">
+              <div class="option-content">
+                <div class="option-title"><i class="fa-solid fa-qrcode"></i> Instant UPI / QR</div>
+                <small>Google Pay, PhonePe, Paytm, BHIM</small>
+              </div>
+            </label>
+            <label class="payment-option-card">
+              <input type="radio" name="paymentMethod" value="Cash on Delivery">
+              <div class="option-content">
+                <div class="option-title"><i class="fa-solid fa-hand-holding-dollar"></i> Cash on Delivery</div>
+                <small>Pay with cash when package arrives</small>
+              </div>
+            </label>
+          </div>
+
+          <!-- Simulated Card Details (Shown if Card is chosen) -->
+          <div class="card-details-fields" id="cardFieldsBox">
+            <div class="form-group">
+              <label>Simulated Card Number</label>
+              <input type="text" placeholder="4532 •••• •••• 8892" value="4532 8920 1827 8892">
+            </div>
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label>Expiration</label>
+                <input type="text" placeholder="MM/YY" value="12/28">
+              </div>
+              <div class="form-group col-6">
+                <label>CVV</label>
+                <input type="password" placeholder="•••" value="842" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-4" id="submitOrderBtn">
+            <i class="fa-solid fa-shield-check"></i> Place Order Now (<span id="checkoutSubmitTotal">₹0.00</span>)
+          </button>
+        </form>
+
+        <!-- Mini Order Summary -->
+        <div class="checkout-summary-card">
+          <h4>Order Summary</h4>
+          <div class="checkout-items-preview" id="checkoutItemsPreview">
+            <!-- Populated via JS -->
+          </div>
+          <div class="summary-table mt-3">
+            <div class="summary-row">
+              <span>Items Subtotal</span>
+              <span id="checkoutSubtotal">₹0.00</span>
+            </div>
+            <div class="summary-row discount-row" id="checkoutDiscountRow" style="display: none;">
+              <span>Coupon Discount</span>
+              <span id="checkoutDiscount">-₹0.00</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="checkoutShipping">₹0.00</span>
+            </div>
+            <div class="summary-row total-row">
+              <span>Amount Due</span>
+              <span id="checkoutGrandTotal">₹0.00</span>
+            </div>
+          </div>
+          <div class="security-guarantee-note">
+            <i class="fa-solid fa-lock"></i> 256-bit TLS Encrypted &amp; Verified Sandbox
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Confirmation & Receipt Modal -->
+  <div class="modal-overlay" id="orderSuccessModal">
+    <div class="modal-container receipt-modal-container">
+      <button class="modal-close-btn" onclick="closeOrderSuccessModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="receipt-header">
+        <div class="success-icon-badge">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2>Order Confirmed!</h2>
+        <p>Thank you for shopping with Everest. Your order has been placed successfully.</p>
+        <div class="order-id-tag">
+          Order ID: <strong id="receiptOrderId">ORD-XXXX</strong>
+        </div>
+      </div>
+
+      <div class="receipt-card" id="receiptPrintArea">
+        <div class="receipt-meta-grid">
+          <div>
+            <span class="meta-label">Customer Name</span>
+            <strong id="receiptCustomerName">John Doe</strong>
+          </div>
+          <div>
+            <span class="meta-label">Customer Email</span>
+            <span id="receiptCustomerEmail">john@example.com</span>
+          </div>
+          <div>
+            <span class="meta-label">Shipping Address</span>
+            <span id="receiptShippingAddress">123 Street</span>
+          </div>
+          <div>
+            <span class="meta-label">Payment Method</span>
+            <span id="receiptPaymentMethod">Credit Card</span>
+          </div>
+        </div>
+
+        <div class="receipt-items-table">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody id="receiptItemsTableBody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="receipt-totals-breakdown">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="receiptSubtotal">₹0.00</span>
+          </div>
+          <div class="summary-row text-success" id="receiptDiscountRow" style="display: none;">
+            <span>Discount Applied:</span>
+            <span id="receiptDiscount">-₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="receiptShipping">₹0.00</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Paid:</span>
+            <span id="receiptTotal">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="receipt-actions">
+        <button class="btn btn-outline" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> Print Invoice
+        </button>
+        <button class="btn btn-primary" onclick="closeOrderSuccessModal()">
+          <i class="fa-solid fa-bag-shopping"></i> Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Registration & Login Modal -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-container auth-modal-container">
+      <button class="modal-close-btn" onclick="closeAuthModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Auth Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="loginTabBtn" onclick="switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="registerTabBtn" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- Quick Demo Login Banner -->
+      <div class="demo-login-box">
+        <div class="demo-box-text">
+          <i class="fa-solid fa-mountain text-warning"></i>
+          <div>
+            <strong>Everest Demo Access:</strong>
+            <p>Click below to sign in instantly without filling forms.</p>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-dark" onclick="quickDemoLogin()">
+          <i class="fa-solid fa-user-check"></i> 1-Click Demo Login
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" required placeholder="demo@codealpha.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <div class="auth-error-msg" id="loginErrorMsg" style="display: none;"></div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-3" id="loginSubmitBtn">
+          Sign In to Your Account
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" required placeholder="CodeAlpha Student">
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" required placeholder="student@example.com">
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password (minimum 6 characters)</label>
+          <input type="password" id="regPassword" minlength="6" required placeholder="Create a strong password">
+        </div>
+        <div class="auth-error-msg" id="registerErrorMsg" style="display: none;"></div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-3" id="registerSubmitBtn">
+          Create Free Account
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- My Orders Modal -->
+  <div class="modal-overlay" id="myOrdersModal">
+    <div class="modal-container orders-modal-container">
+      <button class="modal-close-btn" onclick="closeMyOrdersModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-header">
+        <div class="modal-icon-title">
+          <i class="fa-solid fa-box-archive"></i>
+          <div>
+            <h2>My Orders History</h2>
+            <p>Track past orders, invoices, and delivery statuses.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="orders-list-body" id="ordersListBody">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-icon"><i class="fa-solid fa-mountain"></i></div>
+        <h3>Everest</h3>
+        <p>A full-stack e-commerce store built for Everest with Node.js, Express.js, SQLite, and Vanilla ES6+
+          JavaScript.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Technology Stack</h4>
+        <ul>
+          <li><i class="fa-brands fa-node-js"></i> Node.js &amp; Express.js REST API</li>
+          <li><i class="fa-solid fa-database"></i> SQLite Database (Products, Users, Orders)</li>
+          <li><i class="fa-solid fa-shield-halved"></i> JWT &amp; bcryptjs Password Hashing</li>
+          <li><i class="fa-brands fa-js"></i> Vanilla ES6+ Frontend (No bloat frameworks)</li>
+        </ul>
+      </div>
+      <div class="footer-meta">
+        <h4>Everest Technologies</h4>
+        <p>Company: <strong>Everest</strong></p>
+        <p>Domain: Full Stack Web Development</p>
+        <p>© 2026 Everest Technologies. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
