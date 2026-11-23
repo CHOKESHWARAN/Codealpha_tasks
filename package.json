@@ -1,0 +1,29 @@
+{
+  "name": "codealpha-ecommerce-store",
+  "version": "1.0.0",
+  "description": "CodeAlpha Full Stack Internship Task 1: Simple E-Commerce Store with Product Listings, Details, Shopping Cart, Order Processing, and Authentication.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test-api.js",
+    "seed": "node -e \"require('./db/database').initDb()\""
+  },
+  "keywords": [
+    "ecommerce",
+    "express",
+    "javascript",
+    "shopping-cart",
+    "codealpha",
+    "fullstack"
+  ],
+  "author": "CodeAlpha Intern",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
